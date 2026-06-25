@@ -1,25 +1,22 @@
 // using module from core Node.js
 const fs = require("fs");
-// -------------------------file-----------------------------
-// blocking, synchronous way
-// const textIn = fs.readFileSync("./txt/input.txt", "utf-8");
-// console.log(textIn);
-// const textOut = `what is avocado ? ${textIn}.\nCreated on ${Date.now()}`;
-// fs.writeFileSync("./txt/hello.txt", textOut);
-// non-blocking, asynchronous way
-// fs.readFile("./txt/start.txt", "utf-8", (error, data1) => {
-// 	if (error) console.log("ERROR !");
+const http = require("http");
+const url = require("url");
+// create web server using Nodejs
+const server = http.createServer((req, res) => {
+	const pathname = req.url;
 
-// 	console.log(data1);
-// 	fs.readFile(`./txt/${data1}.txt`, "utf-8", (error, data2) => {
-// 		console.log(data2);
-// 		fs.readFile("./txt/append.txt", "utf-8", (error, data3) => {
-// 			console.log(data3);
+	if (pathname === "/" || pathname === "/overview") {
+		res.end("Overview Page");
+	} else if (pathname === "/product") {
+		res.end("Product Page");
+	} else if (pathname === "/api") {
+		console.log("api");
+	}else {
+      
+   }
+});
 
-// 			fs.writeFile("./txt/final.txt", `${data2}\n${data3}`, "utf-8", (err) => {
-// 				console.log("your file has been written ^^");
-// 			});
-// 		});
-// 	});
-// });
-// console.log("Will read file");
+server.listen(9000, "127.0.0.1", () => {
+	console.log("Listened to requests on  port 9000");
+});
