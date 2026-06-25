@@ -11,12 +11,16 @@ const server = http.createServer((req, res) => {
 	} else if (pathname === "/product") {
 		res.end("Product Page");
 	} else if (pathname === "/api") {
-		console.log("api");
-	}else {
-      
-   }
+		res.end("API");
+	} else {
+		res.writeHead(404, {
+			"content-type": "text/html",
+			"my-own-header": "hello world",
+		});
+		res.end("<h1>Page not found</h1>");
+	}
 });
-
+// listen request on this URL "http://127.0.0.1:9000/"
 server.listen(9000, "127.0.0.1", () => {
 	console.log("Listened to requests on  port 9000");
 });
