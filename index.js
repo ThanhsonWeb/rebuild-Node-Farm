@@ -3,6 +3,11 @@ const fs = require("fs");
 const http = require("http");
 const url = require("url");
 // create web server using Nodejs
+
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const dataObject = JSON.parse(data);
+console.log(dataObject);
+
 const server = http.createServer((req, res) => {
 	const pathname = req.url;
 
@@ -11,7 +16,10 @@ const server = http.createServer((req, res) => {
 	} else if (pathname === "/product") {
 		res.end("Product Page");
 	} else if (pathname === "/api") {
-		res.end("API");
+		res.writeHead(200, {
+			"content-type": "application.json",
+		});
+		res.end(data); // send back data to browser
 	} else {
 		res.writeHead(404, {
 			"content-type": "text/html",
