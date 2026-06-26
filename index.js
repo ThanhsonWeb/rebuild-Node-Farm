@@ -2,18 +2,10 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+// using my module
+const replaceTemplate = require(`${__dirname}/modules/replaceTemplate`);
 
-const replaceTemplate = (temp, el) => {
-	let output = temp.replace(/{%PRODUCTNAME%}/g, el.productName);
-	output = output.replace(/{%IMAGE%}/g, el.image);
-	output = output.replace(/{%PRICE%}/g, el.price);
-	output = output.replace(/{%FROM%}/g, el.from);
-	output = output.replace(/{%NUTRIENTS%}/g, el.nutrients);
-	output = output.replace(/{%QUANTITY%}/g, el.quantity);
-	output = output.replace(/{%DESCRIPTION%}/g, el.description);
-	output = output.replace(/{%ID%}/g, el.id);
-	return output;
-};
+
 // read file synchronous
 const tempOverview = fs.readFileSync(
 	`${__dirname}/templates/template-overview.html`,
@@ -35,6 +27,7 @@ const server = http.createServer((req, res) => {
 	const pathname = req.url;
 
 	if (pathname === "/" || pathname === "/overview") {
+      // replace placeholder with actual data 
 		const cardsContent = dataObject.map((el) => replaceTemplate(tempCard, el));
 		const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsContent);
 		res.end(output);
