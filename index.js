@@ -3,8 +3,7 @@ const fs = require("fs");
 const http = require("http");
 const url = require("url");
 // using my module
-const replaceTemplate = require(`${__dirname}/modules/replaceTemplate`);
-
+const replaceTemplate = require(`${__dirname}/modules/replaceTemplate.js`);
 
 // read file synchronous
 const tempOverview = fs.readFileSync(
@@ -24,15 +23,18 @@ const dataObject = JSON.parse(data);
 
 // ------------------ server------------------
 const server = http.createServer((req, res) => {
-	const pathname = req.url;
+	const { query, pathname } = url.parse(req.url, true);
 
 	if (pathname === "/" || pathname === "/overview") {
-      // replace placeholder with actual data 
+		// replace placeholder with actual data
 		const cardsContent = dataObject.map((el) => replaceTemplate(tempCard, el));
 		const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsContent);
 		res.end(output);
 	} else if (pathname === "/product") {
-		res.end("Product Page");
+      const product = dataObject[query.id]
+		const output = replaceTemplate(tempProduct, product);
+
+		res.end(output);
 	} else if (pathname === "/api") {
 		res.writeHead(200, {
 			"content-type": "application.json",
